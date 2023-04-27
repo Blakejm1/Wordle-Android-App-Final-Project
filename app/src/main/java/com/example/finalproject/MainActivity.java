@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Checks if guess is 5 letters
                 if(guessText.length() == 5) {
-                    // For letter list
                     List<TextView> letterList = Arrays.asList();
                     // For first guess letters
                     if(guessNum == 1) {
