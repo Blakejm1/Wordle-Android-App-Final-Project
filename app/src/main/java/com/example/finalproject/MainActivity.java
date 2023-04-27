@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Button enterButton;
     Button playAgainButton;
     Button howToPlayButton;
+    Button statsButton;
     EditText guessText;
 
     TextView letter1, letter2, letter3, letter4, letter5, letter6, letter7, letter8, letter9,
@@ -40,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
     int guessNum = 1;
     int winStreakNumInt = 0;
 
+    int win1 = 0;
+    int win2 = 0;
+    int win3 = 0;
+    int win4 = 0;
+    int win5 = 0;
+    int win6 = 0;
+    int winNull = 0;
+
     String word;
 
     Random r = new Random();
@@ -52,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         enterButton = findViewById(R.id.button);
         playAgainButton = findViewById(R.id.playAgainButton);
         howToPlayButton = findViewById(R.id.howToPlayButton);
+        statsButton = findViewById(R.id.statsButton);
         guessText = findViewById(R.id.guessText);
 
         letter1 = findViewById(R.id.letter1);
@@ -116,6 +126,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), how_to_play_activity.class);
+                startActivity(i);
+            }
+        });
+
+        statsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), stats_screen.class);
                 startActivity(i);
             }
         });
@@ -252,6 +270,25 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if(guessText.getText().toString().toUpperCase().equals(word)) {
+                        if(guessNum == 1)  {
+                            win1++;
+                        }
+                        else if(guessNum == 2) {
+                            win2++;
+                        }
+                        else if(guessNum == 3) {
+                            win3++;
+                        }
+                        else if(guessNum == 4) {
+                            win4++;
+                        }
+                        else if(guessNum == 5) {
+                            win5++;
+                        }
+                        else if(guessNum == 6) {
+                            win6++;
+                        }
+
                         guessNum = 0;
                         winStreakNumInt++;
                         winStreakNum.setText(String.valueOf(winStreakNumInt));
@@ -261,10 +298,14 @@ public class MainActivity extends AppCompatActivity {
                         guessNum++;
                     }
                     if(guessNum > 6) {
+                        winNull++;
                         winStreakNumInt = 0;
                         winStreakNum.setText(String.valueOf(winStreakNumInt));
                         Toast.makeText(getApplicationContext(), "You ran out of guesses! The word was " + word, Toast.LENGTH_SHORT).show();
                     }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Guess must be 5 letters", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -277,6 +318,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle saveInstanceState) {
         saveInstanceState.putInt("win streak", winStreakNumInt);
+        saveInstanceState.putInt("wins in 1 guess", win1);
+        saveInstanceState.putInt("wins in 2 guesses", win2);
+        saveInstanceState.putInt("wins in 3 guesses", win3);
+        saveInstanceState.putInt("wins in 4 guesses", win4);
+        saveInstanceState.putInt("wins in 5 guesses", win5);
+        saveInstanceState.putInt("wins in 6 guesses", win6);
+        saveInstanceState.putInt("losses", winNull);
         super.onSaveInstanceState(saveInstanceState);
     }
 
@@ -292,12 +340,26 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("shared", MODE_PRIVATE);
         winStreakNumInt = sp.getInt("win streak", 0);
         winStreakNum.setText(String.valueOf(winStreakNumInt));
+        win1 = sp.getInt("wins in 1 guess", 0);
+        win2 = sp.getInt("wins in 2 guesses", 0);
+        win3 = sp.getInt("wins in 3 guesses", 0);
+        win4 = sp.getInt("wins in 4 guesses", 0);
+        win5 = sp.getInt("wins in 5 guesses", 0);
+        win6 = sp.getInt("wins in 5 guesses", 0);
+        winNull = sp.getInt("losses", 0);
         }
 
     private void updateSharedPreferences() {
         SharedPreferences sp = getSharedPreferences("shared", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("win streak", winStreakNumInt);
+        editor.putInt("wins in 1 guess", win1);
+        editor.putInt("wins in 2 guesses", win2);
+        editor.putInt("wins in 3 guesses", win3);
+        editor.putInt("wins in 4 guesses", win4);
+        editor.putInt("wins in 5 guesses", win5);
+        editor.putInt("wins in 6 guesses", win6);
+        editor.putInt("losses", winNull);
         editor.commit();
     }
 }
